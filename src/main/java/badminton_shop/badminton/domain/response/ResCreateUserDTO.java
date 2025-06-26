@@ -15,10 +15,17 @@ public class ResCreateUserDTO {
     private String fullName;
     private String email;
     private String phone;
-    private RoleDTO role;
+    private RoleUser role;
     private String address;
     private String avatar;
     private LocalDate dob;
     private GenderEnum gender;
     private Instant createdAt;
+
+    @Getter
+    @Setter
+    public static class RoleUser {
+        private long id;
+        private String role;
+    }
 }

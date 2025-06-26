@@ -93,24 +93,28 @@ public class UserService {
 	}
 
 	public User handleCreateUser(User user) {
-		Role role = roleService.findByName(RoleName.USER);
-		if (role == null) {
-			throw new IllegalArgumentException("Role 'USER' not found in database.");
+		if (user.getRole() != null) {
+			Optional<Role> role = Optional.ofNullable(roleService.findByName(user.getRole().getName()));
+			user.setRole(role.orElseGet(() -> roleService.findByName(RoleName.USER)));
 		}
-
-		user.setRole(role);
-		user.setCreatedAt(Instant.now());
-
 		return userRepository.save(user);
 	}
 
 	public ResCreateUserDTO convertToResCreateUserDTO(User user) {
+		ResCreateUserDTO.RoleUser roleUser = new ResCreateUserDTO.RoleUser();
+
 		ResCreateUserDTO res = new ResCreateUserDTO();
 		res.setId(user.getUserId());
 		res.setFullName(user.getFullName());
 		res.setEmail(user.getEmail());
 		res.setPhone(user.getPhone());
-		res.setRole(RoleDTO.builder().role(String.valueOf(user.getRole().getName())).build());
+
+		if (user.getRole() != null) {
+			roleUser.setRole(String.valueOf(user.getRole().getName()));
+			roleUser.setId(user.getRole().getId());
+			res.setRole(roleUser);
+		}
+
 		res.setAddress(user.getAddress());
 		res.setAvatar(user.getAvatar());
 		res.setDob(user.getDob());
@@ -121,12 +125,19 @@ public class UserService {
 	}
 
 	public ResUserDTO convertToResUserDTO(User user) {
+		ResUserDTO.RoleUser roleUser = new ResUserDTO.RoleUser();
 		ResUserDTO res = new ResUserDTO();
 		res.setId(user.getUserId());
 		res.setFullName(user.getFullName());
 		res.setEmail(user.getEmail());
 		res.setPhone(user.getPhone());
-		res.setRole(RoleDTO.builder().role(String.valueOf(user.getRole().getName())).build());
+
+		if (user.getRole() != null) {
+			roleUser.setRole(String.valueOf(user.getRole().getName()));
+			roleUser.setId(user.getRole().getId());
+			res.setRole(roleUser);
+		}
+
 		res.setAddress(user.getAddress());
 		res.setAvatar(user.getAvatar());
 		res.setDob(user.getDob());
@@ -138,11 +149,18 @@ public class UserService {
 	}
 
 	public ResUpdateUserDTO convertToResUpdateUserDTO(User user) {
+		ResUpdateUserDTO.RoleUser roleUser = new ResUpdateUserDTO.RoleUser();
+
 		ResUpdateUserDTO res = new ResUpdateUserDTO();
 		res.setId(user.getUserId());
 		res.setFullName(user.getFullName());
 		res.setPhone(user.getPhone());
-		res.setRole(RoleDTO.builder().role(String.valueOf(user.getRole().getName())).build());
+
+		if (user.getRole() != null) {
+			roleUser.setRole(String.valueOf(user.getRole().getName()));
+			roleUser.setId(user.getRole().getId());
+			res.setRole(roleUser);
+		}
 		res.setAddress(user.getAddress());
 		res.setAvatar(user.getAvatar());
 		res.setDob(user.getDob());
