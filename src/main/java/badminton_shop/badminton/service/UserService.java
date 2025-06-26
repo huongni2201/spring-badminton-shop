@@ -3,6 +3,10 @@ package badminton_shop.badminton.service;
 import badminton_shop.badminton.domain.Role;
 import badminton_shop.badminton.domain.User;
 import badminton_shop.badminton.domain.dto.*;
+import badminton_shop.badminton.domain.response.ResCreateUserDTO;
+import badminton_shop.badminton.domain.response.ResUpdateUserDTO;
+import badminton_shop.badminton.domain.response.ResUserDTO;
+import badminton_shop.badminton.domain.response.ResultPaginationDTO;
 import badminton_shop.badminton.utils.enums.RoleName;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +32,7 @@ public class UserService {
 	public ResultPaginationDTO fetchUsers(Specification<User> spec, Pageable pageable) {
 		Page<User> users = this.userRepository.findAll(spec, pageable);
 		ResultPaginationDTO resultPaginationDTO = new ResultPaginationDTO();
-		Meta meta = new Meta();
+		ResultPaginationDTO.Meta meta = new ResultPaginationDTO.Meta();
 
 		meta.setPage(pageable.getPageNumber() + 1);
 		meta.setPageSize(pageable.getPageSize());

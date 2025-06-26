@@ -1,4 +1,4 @@
-package badminton_shop.badminton.domain;
+package badminton_shop.badminton.domain.response;
 
 
 import lombok.AllArgsConstructor;

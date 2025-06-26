@@ -1,8 +1,8 @@
 package badminton_shop.badminton.controller;
 
 import badminton_shop.badminton.domain.User;
-import badminton_shop.badminton.domain.dto.LoginDTO;
-import badminton_shop.badminton.domain.dto.ResLoginDTO;
+import badminton_shop.badminton.domain.request.ReqLoginDTO;
+import badminton_shop.badminton.domain.response.ResLoginDTO;
 import badminton_shop.badminton.service.UserService;
 import badminton_shop.badminton.utils.SecurityUtil;
 import badminton_shop.badminton.utils.annotation.ApiMessage;
@@ -38,10 +38,10 @@ public class AuthController {
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity<ResLoginDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<ResLoginDTO> login(@Valid @RequestBody ReqLoginDTO reqLoginDTO) {
         //Nạp input gồm username/password vào Security
         UsernamePasswordAuthenticationToken authenticationToken
-                = new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword());
+                = new UsernamePasswordAuthenticationToken(reqLoginDTO.getUsername(), reqLoginDTO.getPassword());
 
         //xác thực người dùng => cần viết hàm loadUserByUsername
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
@@ -52,7 +52,7 @@ public class AuthController {
         // create token
         ResLoginDTO resLoginDTO = new ResLoginDTO();
 
-        User currentUserDB = this.userService.findByEmail(loginDTO.getUsername());
+        User currentUserDB = this.userService.findByEmail(reqLoginDTO.getUsername());
         if (currentUserDB != null) {
             ResLoginDTO.UserLogin userLogin = ResLoginDTO.UserLogin.builder()
                     .id(currentUserDB.getUserId())
@@ -70,10 +70,10 @@ public class AuthController {
         resLoginDTO.setAccessToken(access_token);
 
         // create refresh token
-        String refresh_token = this.securityUtil.createRefreshToken(loginDTO.getUsername(), resLoginDTO);
+        String refresh_token = this.securityUtil.createRefreshToken(reqLoginDTO.getUsername(), resLoginDTO);
 
         // update user
-        this.userService.updateUserToken(refresh_token, loginDTO.getUsername() );
+        this.userService.updateUserToken(refresh_token, reqLoginDTO.getUsername() );
 
         // set cookies
          ResponseCookie resCookie = ResponseCookie

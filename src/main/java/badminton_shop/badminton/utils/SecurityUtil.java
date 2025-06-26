@@ -1,6 +1,6 @@
 package badminton_shop.badminton.utils;
 
-import badminton_shop.badminton.domain.dto.ResLoginDTO;
+import badminton_shop.badminton.domain.response.ResLoginDTO;
 import com.nimbusds.jose.util.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;

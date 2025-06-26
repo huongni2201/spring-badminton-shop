@@ -1,8 +1,7 @@
 package badminton_shop.badminton.service;
 
 import badminton_shop.badminton.domain.OrderItem;
-import badminton_shop.badminton.domain.dto.Meta;
-import badminton_shop.badminton.domain.dto.ResultPaginationDTO;
+import badminton_shop.badminton.domain.response.ResultPaginationDTO;
 import badminton_shop.badminton.repository.OrderItemRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +20,7 @@ public class OrderItemService {
         Page<OrderItem> orderItems = this.orderItemRepository.findAll(spec, pageable);
 
         ResultPaginationDTO res = new ResultPaginationDTO();
-        Meta meta = new Meta();
+        ResultPaginationDTO.Meta meta = new ResultPaginationDTO.Meta();
 
         meta.setPage(pageable.getPageNumber() + 1);
         meta.setPageSize(pageable.getPageSize());

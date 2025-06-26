@@ -1,7 +1,7 @@
 package badminton_shop.badminton.utils.error;
 
 
-import badminton_shop.badminton.domain.RestResponse;
+import badminton_shop.badminton.domain.response.RestResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;

@@ -1,4 +1,4 @@
-package badminton_shop.badminton.domain.dto;
+package badminton_shop.badminton.domain.request;
 
 
 import jakarta.validation.constraints.NotBlank;
@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginDTO {
+public class ReqLoginDTO {
     @NotBlank(message = "Username cannot be blank")
     private String username;
 

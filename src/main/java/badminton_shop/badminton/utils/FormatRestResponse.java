@@ -1,6 +1,6 @@
 package badminton_shop.badminton.utils;
 
-import badminton_shop.badminton.domain.RestResponse;
+import badminton_shop.badminton.domain.response.RestResponse;
 import badminton_shop.badminton.utils.annotation.ApiMessage;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.core.MethodParameter;

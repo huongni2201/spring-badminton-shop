@@ -1,8 +1,7 @@
 package badminton_shop.badminton.service;
 
 import badminton_shop.badminton.domain.Product;
-import badminton_shop.badminton.domain.dto.Meta;
-import badminton_shop.badminton.domain.dto.ResultPaginationDTO;
+import badminton_shop.badminton.domain.response.ResultPaginationDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -23,7 +22,7 @@ public class ProductService {
     public ResultPaginationDTO fetchProducts(Specification<Product> spec, Pageable pageable) {
         Page<Product> products = this.productRepository.findAll(spec, pageable);
         ResultPaginationDTO resultPaginationDTO = new ResultPaginationDTO();
-        Meta meta = new Meta();
+        ResultPaginationDTO.Meta meta = new ResultPaginationDTO.Meta();
 
         meta.setPage(pageable.getPageNumber() + 1);
         meta.setPageSize(pageable.getPageSize());

@@ -1,8 +1,8 @@
 package badminton_shop.badminton.controller;
 
 import badminton_shop.badminton.domain.Product;
-import badminton_shop.badminton.domain.RestResponse;
-import badminton_shop.badminton.domain.dto.ResultPaginationDTO;
+import badminton_shop.badminton.domain.response.RestResponse;
+import badminton_shop.badminton.domain.response.ResultPaginationDTO;
 import badminton_shop.badminton.service.ProductService;
 import badminton_shop.badminton.utils.annotation.ApiMessage;
 import com.turkraft.springfilter.boot.Filter;

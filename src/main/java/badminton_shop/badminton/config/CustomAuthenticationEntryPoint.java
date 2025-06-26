@@ -1,6 +1,6 @@
 package badminton_shop.badminton.config;
 
-import badminton_shop.badminton.domain.RestResponse;
+import badminton_shop.badminton.domain.response.RestResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

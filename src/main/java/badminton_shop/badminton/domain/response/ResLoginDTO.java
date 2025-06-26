@@ -1,4 +1,4 @@
-package badminton_shop.badminton.domain.dto;
+package badminton_shop.badminton.domain.response;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;

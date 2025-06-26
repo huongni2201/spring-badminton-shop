@@ -1,10 +1,10 @@
 package badminton_shop.badminton.controller;
 
 import badminton_shop.badminton.domain.User;
-import badminton_shop.badminton.domain.dto.ResCreateUserDTO;
-import badminton_shop.badminton.domain.dto.ResUpdateUserDTO;
-import badminton_shop.badminton.domain.dto.ResUserDTO;
-import badminton_shop.badminton.domain.dto.ResultPaginationDTO;
+import badminton_shop.badminton.domain.response.ResCreateUserDTO;
+import badminton_shop.badminton.domain.response.ResUpdateUserDTO;
+import badminton_shop.badminton.domain.response.ResUserDTO;
+import badminton_shop.badminton.domain.response.ResultPaginationDTO;
 import badminton_shop.badminton.utils.annotation.ApiMessage;
 import badminton_shop.badminton.utils.error.IdInvalidException;
 import com.turkraft.springfilter.boot.Filter;
