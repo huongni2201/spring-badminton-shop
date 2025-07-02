@@ -18,4 +18,8 @@ public class CategoryService {
     public List<Category> getAllCategories() {
         return this.categoryRepository.findAll();
     }
+
+    public Category getCategoryById(Long id) {
+        return this.categoryRepository.findById(id).orElse(null);
+    }
 }

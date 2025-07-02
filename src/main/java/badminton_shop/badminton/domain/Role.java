@@ -1,6 +1,7 @@
 package badminton_shop.badminton.domain;
 
-import badminton_shop.badminton.utils.enums.RoleName;
+import badminton_shop.badminton.utils.constant.RoleName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,5 +26,6 @@ public class Role {
 
     @OneToMany(mappedBy = "role")
     @JsonManagedReference
+    @JsonIgnore
     private List<User> users;
 }

@@ -18,4 +18,8 @@ public class BrandService {
     public List<Brand> getAllBrands() {
         return this.brandRepository.findAll();
     }
+
+    public Brand getBrandById(Long id) {
+        return this.brandRepository.findById(id).orElse(null);
+    }
 }

@@ -20,12 +20,5 @@ public class OrderItemController {
         this.orderItemService = orderItemService;
     }
 
-    @GetMapping("/order-items")
-    @ApiMessage("fetch all order items")
-    public ResponseEntity<ResultPaginationDTO> fetchOrderItems(
-            @Filter Specification<OrderItem> spec, Pageable pageable) {
-        return ResponseEntity.ok(this.orderItemService.fetchOrderItems(spec, pageable));
-    }
-
 
 }

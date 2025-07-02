@@ -1,7 +1,6 @@
 package badminton_shop.badminton.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,8 +21,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "variant_attribute_values")
-public class VariantAttributeValue {
+@Table(name = "product_variant_attribute_values")
+public class ProductVariantAttributeValue {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,7 +34,7 @@ public class VariantAttributeValue {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "variantAttribute_id")
-    private VariantAttribute variantAttribute;
+    private ProductVariantAttribute productVariantAttribute;
 
     @Column(nullable = false)
     private String value;

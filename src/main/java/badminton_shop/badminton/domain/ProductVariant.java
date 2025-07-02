@@ -38,7 +38,7 @@ public class ProductVariant {
 
     @OneToMany(mappedBy = "productVariant", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference
-    private List<VariantAttributeValue> attributeValues;
+    private List<ProductVariantAttributeValue> productVariantAttributeValues;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

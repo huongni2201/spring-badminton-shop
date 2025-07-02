@@ -1,7 +1,7 @@
 package badminton_shop.badminton.repository;
 
 import badminton_shop.badminton.domain.Role;
-import badminton_shop.badminton.utils.enums.RoleName;
+import badminton_shop.badminton.utils.constant.RoleName;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

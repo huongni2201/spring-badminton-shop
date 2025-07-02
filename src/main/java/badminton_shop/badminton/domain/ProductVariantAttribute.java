@@ -17,8 +17,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "variant_attributes")
-public class VariantAttribute {
+@Table(name = "product_variant_attributes")
+public class ProductVariantAttribute {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

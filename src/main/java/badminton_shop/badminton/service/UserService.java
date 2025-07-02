@@ -2,19 +2,17 @@ package badminton_shop.badminton.service;
 
 import badminton_shop.badminton.domain.Role;
 import badminton_shop.badminton.domain.User;
-import badminton_shop.badminton.domain.dto.*;
-import badminton_shop.badminton.domain.response.ResCreateUserDTO;
-import badminton_shop.badminton.domain.response.ResUpdateUserDTO;
-import badminton_shop.badminton.domain.response.ResUserDTO;
+import badminton_shop.badminton.domain.response.user.ResCreateUserDTO;
+import badminton_shop.badminton.domain.response.user.ResUpdateUserDTO;
+import badminton_shop.badminton.domain.response.user.ResUserDTO;
 import badminton_shop.badminton.domain.response.ResultPaginationDTO;
-import badminton_shop.badminton.utils.enums.RoleName;
+import badminton_shop.badminton.utils.constant.RoleName;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import badminton_shop.badminton.repository.UserRepository;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +29,7 @@ public class UserService {
 
 	public ResultPaginationDTO fetchUsers(Specification<User> spec, Pageable pageable) {
 		Page<User> users = this.userRepository.findAll(spec, pageable);
-		ResultPaginationDTO resultPaginationDTO = new ResultPaginationDTO();
+		ResultPaginationDTO resultPaginationDTO = ResultPaginationDTO.builder().build();
 		ResultPaginationDTO.Meta meta = new ResultPaginationDTO.Meta();
 
 		meta.setPage(pageable.getPageNumber() + 1);
@@ -93,16 +91,17 @@ public class UserService {
 	}
 
 	public User handleCreateUser(User user) {
-		if (user.getRole() != null) {
-			Optional<Role> role = Optional.ofNullable(roleService.findByName(user.getRole().getName()));
-			user.setRole(role.orElseGet(() -> roleService.findByName(RoleName.USER)));
+		if (user.getRole() != null && user.getRole().getName() != null) {
+			Role foundRole = roleService.findByName(user.getRole().getName());
+			user.setRole(foundRole != null ? foundRole : roleService.findByName(RoleName.USER));
+		} else {
+			user.setRole(roleService.findByName(RoleName.USER));
 		}
+
 		return userRepository.save(user);
 	}
 
 	public ResCreateUserDTO convertToResCreateUserDTO(User user) {
-		ResCreateUserDTO.RoleUser roleUser = new ResCreateUserDTO.RoleUser();
-
 		ResCreateUserDTO res = new ResCreateUserDTO();
 		res.setId(user.getUserId());
 		res.setFullName(user.getFullName());
@@ -110,9 +109,7 @@ public class UserService {
 		res.setPhone(user.getPhone());
 
 		if (user.getRole() != null) {
-			roleUser.setRole(String.valueOf(user.getRole().getName()));
-			roleUser.setId(user.getRole().getId());
-			res.setRole(roleUser);
+			res.setRole(RoleName.valueOf(String.valueOf(user.getRole().getName())));
 		}
 
 		res.setAddress(user.getAddress());

@@ -1,6 +1,6 @@
 package badminton_shop.badminton.domain;
 
-import badminton_shop.badminton.utils.enums.GenderEnum;
+import badminton_shop.badminton.utils.constant.GenderEnum;
 import badminton_shop.badminton.utils.SecurityUtil;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
@@ -55,6 +55,8 @@ public class User {
 
     @Column(columnDefinition = "MEDIUMTEXT")
     private String refreshToken;
+
+
 
     private Instant createdAt;
     private Instant updatedAt;

@@ -1,24 +1,25 @@
-package badminton_shop.badminton.domain.response;
+package badminton_shop.badminton.domain.response.user;
 
-import badminton_shop.badminton.domain.dto.RoleDTO;
-import badminton_shop.badminton.utils.enums.GenderEnum;
+import badminton_shop.badminton.utils.constant.GenderEnum;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
 import java.time.LocalDate;
 
-@Setter
 @Getter
-public class ResUpdateUserDTO {
+@Setter
+public class ResUserDTO {
     private long id;
     private String fullName;
+    private String email;
     private String phone;
     private RoleUser role;
     private String address;
     private String avatar;
     private LocalDate dob;
     private GenderEnum gender;
+    private Instant createdAt;
     private Instant updatedAt;
 
     @Getter

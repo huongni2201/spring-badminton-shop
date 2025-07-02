@@ -16,20 +16,4 @@ public class OrderItemService {
         this.orderItemRepository = orderItemRepository;
     }
 
-    public ResultPaginationDTO fetchOrderItems(Specification<OrderItem> spec, Pageable pageable) {
-        Page<OrderItem> orderItems = this.orderItemRepository.findAll(spec, pageable);
-
-        ResultPaginationDTO res = new ResultPaginationDTO();
-        ResultPaginationDTO.Meta meta = new ResultPaginationDTO.Meta();
-
-        meta.setPage(pageable.getPageNumber() + 1);
-        meta.setPageSize(pageable.getPageSize());
-        meta.setTotalPages(orderItems.getTotalPages());
-        meta.setTotalItems(orderItems.getTotalElements());
-
-        res.setMeta(meta);
-        res.setResult(orderItems.getContent());
-
-        return res;
-    }
 }

@@ -1,5 +1,6 @@
 package badminton_shop.badminton.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,10 +25,11 @@ public class CartItem {
     private Long id;
 
     @ManyToOne(optional = false)
+    @JsonBackReference
     private Cart cart;
 
     @ManyToOne(optional = false)
-    private Product product;
+    private ProductVariant variant;
 
     @Column(nullable = false)
     private int quantity;

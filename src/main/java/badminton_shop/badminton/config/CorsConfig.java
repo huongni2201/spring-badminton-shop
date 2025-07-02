@@ -12,13 +12,14 @@ import java.util.Arrays;
 public class CorsConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
+        var configuration = new CorsConfiguration();
 
         // Allow which url can connect to db
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://localhost:3000",
                 "http://localhost:5173",
-                "http://localhost:4173"));
+                "http://localhost:4173",
+                "http://localhost:8080"));
 
         // Method can be used to access the db
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Allowed methods
@@ -29,7 +30,7 @@ public class CorsConfig {
         configuration.setMaxAge(3600L);
         // How long the response from a pre-flight request can be cached by clients
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        var source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration); // Apply this configuration to all paths
         return source;
     }

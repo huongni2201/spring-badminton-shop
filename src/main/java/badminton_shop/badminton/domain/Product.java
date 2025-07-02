@@ -3,7 +3,7 @@ package badminton_shop.badminton.domain;
 import java.time.Instant;
 import java.util.List;
 
-import badminton_shop.badminton.utils.enums.ProductStatus;
+import badminton_shop.badminton.utils.constant.ProductStatus;
 import badminton_shop.badminton.utils.SecurityUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;

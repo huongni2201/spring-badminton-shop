@@ -2,7 +2,7 @@ package badminton_shop.badminton.controller;
 
 import badminton_shop.badminton.domain.User;
 import badminton_shop.badminton.domain.request.ReqLoginDTO;
-import badminton_shop.badminton.domain.response.ResLoginDTO;
+import badminton_shop.badminton.domain.response.user.ResLoginDTO;
 import badminton_shop.badminton.service.UserService;
 import badminton_shop.badminton.utils.SecurityUtil;
 import badminton_shop.badminton.utils.annotation.ApiMessage;
@@ -20,6 +20,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api/v1/auth")
 public class AuthController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final SecurityUtil securityUtil;
@@ -37,7 +38,7 @@ public class AuthController {
         this.userService = userService;
     }
 
-    @PostMapping("/auth/login")
+    @PostMapping("/login")
     public ResponseEntity<ResLoginDTO> login(@Valid @RequestBody ReqLoginDTO reqLoginDTO) {
         //Nạp input gồm username/password vào Security
         UsernamePasswordAuthenticationToken authenticationToken
@@ -87,7 +88,7 @@ public class AuthController {
                 .body(resLoginDTO);
     }
 
-    @GetMapping("/auth/account")
+    @GetMapping("/account")
     @ApiMessage("fetch account message")
     public ResponseEntity<ResLoginDTO.UserGetAccout> getAccount() {
         String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
@@ -109,7 +110,7 @@ public class AuthController {
         return ResponseEntity.ok(getAccount);
     }
 
-    @GetMapping("/auth/refresh")
+    @GetMapping("/refresh")
     @ApiMessage("Get user by refresh token")
     public ResponseEntity<ResLoginDTO> getRefreshToken(
             @CookieValue(name = "refresh_token") String refresh_token
@@ -160,7 +161,7 @@ public class AuthController {
                 .body(resLoginDTO);
     }
 
-    @PostMapping("/auth/logout")
+    @PostMapping("/logout")
     @ApiMessage("Logout user")
     public ResponseEntity<Void> logout() throws IdInvalidException {
         String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";

@@ -1,4 +1,4 @@
-package badminton_shop.badminton.utils.enums;
+package badminton_shop.badminton.utils.constant;
 
 public enum RoleName {
     ADMIN, USER, STAFF

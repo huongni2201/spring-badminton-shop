@@ -1,4 +1,4 @@
-package badminton_shop.badminton.domain.response;
+package badminton_shop.badminton.domain.response.user;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
