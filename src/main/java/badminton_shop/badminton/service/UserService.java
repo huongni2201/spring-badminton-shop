@@ -6,7 +6,9 @@ import badminton_shop.badminton.domain.response.user.ResCreateUserDTO;
 import badminton_shop.badminton.domain.response.user.ResUpdateUserDTO;
 import badminton_shop.badminton.domain.response.user.ResUserDTO;
 import badminton_shop.badminton.domain.response.ResultPaginationDTO;
+import badminton_shop.badminton.utils.SecurityUtil;
 import badminton_shop.badminton.utils.constant.RoleName;
+import badminton_shop.badminton.utils.exception.IdInvalidException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -56,14 +58,14 @@ public class UserService {
 
 		if (currentUser != null) {
 			currentUser.setFullName(reqUser.getFullName());
-			currentUser.setAddress(reqUser.getAddress());
 			currentUser.setPhone(reqUser.getPhone());
 			currentUser.setGender(reqUser.getGender());
 			currentUser.setAvatar(reqUser.getAvatar());
 			currentUser.setDob(reqUser.getDob());
+			currentUser.setAddress(reqUser.getAddress());
 			return userRepository.save(currentUser);
 		}
-		return currentUser;
+		return null;
 	}
 
 	public void updateUserToken(String token, String email) {
@@ -80,6 +82,20 @@ public class UserService {
 
 	public User findByEmail(String email) {
 		return userRepository.findByEmail(email);
+	}
+
+
+	public User fetchUserLogin() throws IdInvalidException {
+		String email = SecurityUtil.getCurrentUserLogin()
+				.orElseThrow(() -> new IdInvalidException("User not authenticated!"));
+
+		User currentUser = this.findByEmail(email);
+
+		if (currentUser == null) {
+			throw new IdInvalidException("User not found!");
+		}
+
+		return currentUser;
 	}
 
 	public boolean isEmailExist(String email) {
@@ -112,7 +128,6 @@ public class UserService {
 			res.setRole(RoleName.valueOf(String.valueOf(user.getRole().getName())));
 		}
 
-		res.setAddress(user.getAddress());
 		res.setAvatar(user.getAvatar());
 		res.setDob(user.getDob());
 		res.setGender(user.getGender());
@@ -135,7 +150,6 @@ public class UserService {
 			res.setRole(roleUser);
 		}
 
-		res.setAddress(user.getAddress());
 		res.setAvatar(user.getAvatar());
 		res.setDob(user.getDob());
 		res.setGender(user.getGender());
@@ -158,7 +172,6 @@ public class UserService {
 			roleUser.setId(user.getRole().getId());
 			res.setRole(roleUser);
 		}
-		res.setAddress(user.getAddress());
 		res.setAvatar(user.getAvatar());
 		res.setDob(user.getDob());
 		res.setGender(user.getGender());

@@ -29,15 +29,11 @@ public class OrderItem {
     private Order order;
 
     @ManyToOne(optional = false)
-    private Product product;
+    private ProductVariant productVariant;
 
     @Column(nullable = false)
     private int quantity;
 
     @Column(nullable = false)
     private double priceAtOrderTime;
-
-    public double getSubtotal() {
-        return quantity * priceAtOrderTime;
-    }
 }

@@ -1,6 +1,7 @@
 package badminton_shop.badminton.domain;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -24,11 +25,12 @@ public class Cart {
     private Long id;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference
-    private List<CartItem> items;
+    private List<CartItem> items = new ArrayList<>();
 
     private LocalDateTime createdAt;
 

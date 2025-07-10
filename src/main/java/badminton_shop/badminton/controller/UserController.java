@@ -1,12 +1,15 @@
 package badminton_shop.badminton.controller;
 
+import badminton_shop.badminton.domain.Order;
 import badminton_shop.badminton.domain.User;
 import badminton_shop.badminton.domain.response.user.ResCreateUserDTO;
 import badminton_shop.badminton.domain.response.user.ResUpdateUserDTO;
 import badminton_shop.badminton.domain.response.user.ResUserDTO;
 import badminton_shop.badminton.domain.response.ResultPaginationDTO;
+import badminton_shop.badminton.domain.response.user.ResUserInfo;
+import badminton_shop.badminton.service.OrderService;
 import badminton_shop.badminton.utils.annotation.ApiMessage;
-import badminton_shop.badminton.utils.error.IdInvalidException;
+import badminton_shop.badminton.utils.exception.IdInvalidException;
 import com.turkraft.springfilter.boot.Filter;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -16,16 +19,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import badminton_shop.badminton.service.UserService;
-import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 
 @RestController
 public class UserController {
     private final UserService userService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final OrderService orderService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, OrderService orderService) {
         this.userService = userService;
+        this.orderService = orderService;
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
     }
 
@@ -82,6 +88,32 @@ public class UserController {
         }
         this.userService.deleteById(id);
         return ResponseEntity.ok(null);
+    }
+
+    @GetMapping("/api/v1/users/info")
+    @ApiMessage("Fetch user info")
+    public ResponseEntity<ResUserInfo> fetchUserInfo() throws IdInvalidException {
+        User currentUser = this.userService.fetchUserLogin();
+        if (currentUser == null) {
+            throw new IdInvalidException("User not login...");
+        }
+        List<Order> orders = this.orderService.fetchOrdersByUser(currentUser);
+
+        ResUserInfo resUserInfo = ResUserInfo.builder()
+                .id(currentUser.getUserId())
+                .fullName(currentUser.getFullName())
+                .email(currentUser.getEmail())
+                .dob(currentUser.getDob())
+                .phone(currentUser.getPhone())
+                .address(currentUser.getAddress())
+                .avatar(currentUser.getAvatar())
+                .gender(currentUser.getGender().toString())
+                .totalOrder(orders.size())
+                .totalPrice(orders.stream().mapToDouble(Order::getTotalPrice).sum())
+                .createdAt(currentUser.getCreatedAt())
+                .build();
+
+        return ResponseEntity.ok(resUserInfo);
     }
 
 

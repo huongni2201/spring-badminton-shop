@@ -15,7 +15,7 @@ public class ProductVariantService {
         this.productVariantRepository = productVariantRepository;
     }
 
-    public ProductVariant createProductVariant(ProductVariant productVariant) {
+    public ProductVariant save(ProductVariant productVariant) {
         return this.productVariantRepository.save(productVariant);
     }
 

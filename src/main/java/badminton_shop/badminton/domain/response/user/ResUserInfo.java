@@ -1,6 +1,6 @@
 package badminton_shop.badminton.domain.response.user;
 
-import badminton_shop.badminton.utils.constant.GenderEnum;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,22 +9,20 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-public class ResUserDTO {
+@Builder
+public class ResUserInfo {
     private long id;
     private String fullName;
     private String email;
     private String phone;
-    private RoleUser role;
     private String avatar;
     private LocalDate dob;
-    private GenderEnum gender;
-    private Instant createdAt;
-    private Instant updatedAt;
+    private String gender;
+    private String role;
+    private String address;
 
-    @Getter
-    @Setter
-    public static class RoleUser {
-        private long id;
-        private String role;
-    }
+    private int totalOrder;
+    private double totalPrice;
+
+    private Instant createdAt;
 }

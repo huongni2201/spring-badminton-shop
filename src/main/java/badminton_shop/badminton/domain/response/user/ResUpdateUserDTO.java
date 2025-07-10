@@ -14,7 +14,6 @@ public class ResUpdateUserDTO {
     private String fullName;
     private String phone;
     private RoleUser role;
-    private String address;
     private String avatar;
     private LocalDate dob;
     private GenderEnum gender;

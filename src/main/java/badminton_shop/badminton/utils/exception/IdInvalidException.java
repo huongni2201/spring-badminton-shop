@@ -1,4 +1,4 @@
-package badminton_shop.badminton.utils.error;
+package badminton_shop.badminton.utils.exception;
 
 public class IdInvalidException extends Exception{
 

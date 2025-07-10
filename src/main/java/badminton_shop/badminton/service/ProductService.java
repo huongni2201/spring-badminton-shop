@@ -7,7 +7,7 @@ import badminton_shop.badminton.domain.response.product.ResProductListDTO;
 import badminton_shop.badminton.domain.response.ResultPaginationDTO;
 import badminton_shop.badminton.repository.ProductRepository;
 import badminton_shop.badminton.utils.MyUtils;
-import badminton_shop.badminton.utils.error.IdInvalidException;
+import badminton_shop.badminton.utils.exception.IdInvalidException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -102,7 +102,7 @@ public class ProductService {
         Product finalProduct = product;
         List<ProductVariant> variants = dto.getVariants().stream()
                 .map(v -> buildProductVariant(finalProduct, v, colorAttr, sizeAttr))
-                .toList();
+                .collect(Collectors.toCollection(ArrayList::new));
         product.setProductVariants(variants);
 
         return productRepository.save(product);
@@ -229,27 +229,33 @@ public class ProductService {
 
     private ProductVariant buildProductVariant(Product product, ReqProductDTO.ReqVariantDTO v,
                                                ProductVariantAttribute colorAttr, ProductVariantAttribute sizeAttr) {
+
         ProductVariant variant = ProductVariant.builder()
                 .price(v.getPrice())
                 .stockQuantity(v.getStockQuantity())
                 .product(product)
+                .sku(MyUtils.generateSKU(product.getName(), v.getColor(), v.getSize()))
                 .build();
 
-        List<ProductVariantAttributeValue> attrs = List.of(
-                ProductVariantAttributeValue.builder()
-                        .productVariantAttribute(colorAttr)
-                        .value(v.getColor())
-                        .productVariant(variant)
-                        .build(),
-                ProductVariantAttributeValue.builder()
-                        .productVariantAttribute(sizeAttr)
-                        .value(v.getSize())
-                        .productVariant(variant)
-                        .build()
-        );
+        List<ProductVariantAttributeValue> variantAttrValues = new ArrayList<>();
+        variantAttrValues.add(ProductVariantAttributeValue.builder()
+                .productVariantAttribute(colorAttr)
+                .value(v.getColor())
+                .productVariant(variant)
+                .build());
+        variantAttrValues.add( ProductVariantAttributeValue.builder()
+                .productVariantAttribute(sizeAttr)
+                .value(v.getSize())
+                .productVariant(variant)
+                .build());
 
-        variant.setProductVariantAttributeValues(attrs);
-        variant.setSku(MyUtils.generateSKU(product.getName(), v.getColor(), v.getSize()));
+        variant.setProductVariantAttributeValues(variantAttrValues);
+
         return variant;
     }
+
+
+
+
+
 }

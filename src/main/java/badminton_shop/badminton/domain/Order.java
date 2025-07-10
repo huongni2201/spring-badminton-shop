@@ -1,8 +1,10 @@
 package badminton_shop.badminton.domain;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
+import badminton_shop.badminton.utils.SecurityUtil;
+import badminton_shop.badminton.utils.constant.PaymentMethod;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import badminton_shop.badminton.utils.constant.OrderStatus;
@@ -31,26 +33,42 @@ public class Order {
     @Column(nullable = false)
     private OrderStatus status;
 
-    @Column(nullable = false)
-    private String shippingAddress;
+    private String fullName;
+    private String phone;
+    private String email;
 
-    private String phoneNumber;
+    private String address;
 
     private String note;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PaymentMethod paymentMethod;
+
+
     @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<OrderItem> orderItems;
 
-    private LocalDateTime createdAt;
+    private Instant createdAt;
+    private Instant updatedAt;
+
+    private String createdBy;
+    private String updatedBy;
 
     @PrePersist
     protected void onCreate() {
-        if (createdAt == null) {
-            createdAt = LocalDateTime.now();
-        }
+        this.createdAt = Instant.now();
+        this.createdBy = SecurityUtil.getCurrentUserLogin().orElse("");
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedBy = SecurityUtil.getCurrentUserLogin().orElse("");
+        this.updatedAt = Instant.now();
     }
 }

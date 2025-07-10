@@ -3,7 +3,7 @@ package badminton_shop.badminton.controller;
 import badminton_shop.badminton.domain.response.file.ResUploadFileDTO;
 import badminton_shop.badminton.service.FileService;
 import badminton_shop.badminton.utils.annotation.ApiMessage;
-import badminton_shop.badminton.utils.error.StorageException;
+import badminton_shop.badminton.utils.exception.StorageException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

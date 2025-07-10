@@ -38,13 +38,12 @@ public class User {
     @Column(length = 20)
     private String phone;
 
+    private String address;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "role_id", nullable = false)
     @JsonBackReference
     private Role role;
-
-    @Column(length = 255)
-    private String address;
 
     private String avatar;
 
@@ -55,8 +54,6 @@ public class User {
 
     @Column(columnDefinition = "MEDIUMTEXT")
     private String refreshToken;
-
-
 
     private Instant createdAt;
     private Instant updatedAt;

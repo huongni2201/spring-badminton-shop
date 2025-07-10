@@ -1,4 +1,4 @@
-package badminton_shop.badminton.utils.error;
+package badminton_shop.badminton.utils.exception;
 
 
 import badminton_shop.badminton.domain.response.RestResponse;
@@ -63,6 +63,16 @@ public class GlobalException {
         RestResponse<Object> resResponse = new RestResponse<>();
         resResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
         resResponse.setMessage("Exception upload file occurs...");
+        resResponse.setError(ex.getMessage());
+        return ResponseEntity.badRequest().body(resResponse);
+    }
+
+    @ExceptionHandler(value =
+            {InvalidArgumentException.class})
+    public ResponseEntity<RestResponse<Object>> handleIllegalArgumentException(Exception ex) {
+        RestResponse<Object> resResponse = new RestResponse<>();
+        resResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+        resResponse.setMessage("Invalid argument occurs...");
         resResponse.setError(ex.getMessage());
         return ResponseEntity.badRequest().body(resResponse);
     }

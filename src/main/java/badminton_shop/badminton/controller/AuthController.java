@@ -6,7 +6,7 @@ import badminton_shop.badminton.domain.response.user.ResLoginDTO;
 import badminton_shop.badminton.service.UserService;
 import badminton_shop.badminton.utils.SecurityUtil;
 import badminton_shop.badminton.utils.annotation.ApiMessage;
-import badminton_shop.badminton.utils.error.IdInvalidException;
+import badminton_shop.badminton.utils.exception.IdInvalidException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -61,6 +61,9 @@ public class AuthController {
                     .email(currentUserDB.getEmail())
                     .fullName(currentUserDB.getFullName())
                     .role(currentUserDB.getRole().getName().name())
+                    .phone(currentUserDB.getPhone())
+                    .dob(currentUserDB.getDob().toString())
+                    .gender(currentUserDB.getGender())
                     .build();
             resLoginDTO.setUser(userLogin);
 
@@ -104,6 +107,9 @@ public class AuthController {
             userLogin.setEmail(currentUserDB.getEmail());
             userLogin.setFullName(currentUserDB.getFullName());
             userLogin.setRole(currentUserDB.getRole().getName().name());
+            userLogin.setDob(currentUserDB.getDob().toString());
+            userLogin.setGender(currentUserDB.getGender());
+            userLogin.setPhone(currentUserDB.getPhone());
 
             getAccount.setUser(userLogin);
         }

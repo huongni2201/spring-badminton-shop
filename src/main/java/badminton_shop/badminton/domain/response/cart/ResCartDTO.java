@@ -6,22 +6,24 @@ import lombok.Setter;
 
 import java.util.List;
 
-public class CartResponseDTO {
+@Getter
+@Setter
+@Builder
+public class ResCartDTO {
     private Long cartId;
-    private CartUserDTO userDTO;
+    private ResCartUserDTO userDTO;
 
-    private List<CartItemResponseDTO> items;
+    private List<ResCartItemDTO> items;
 
     private double totalPrice;
-    private double shippingPrice;
 
     @Getter
     @Setter
     @Builder
-    public static class CartUserDTO {
+    public static class ResCartUserDTO {
         private Long id;
         private String fullName;
         private String email;
-        private String phoneNumber;
+        private String phone;
     }
 }

@@ -7,7 +7,7 @@ import badminton_shop.badminton.domain.response.RestResponse;
 import badminton_shop.badminton.domain.response.ResultPaginationDTO;
 import badminton_shop.badminton.service.ProductService;
 import badminton_shop.badminton.utils.annotation.ApiMessage;
-import badminton_shop.badminton.utils.error.IdInvalidException;
+import badminton_shop.badminton.utils.exception.IdInvalidException;
 import com.turkraft.springfilter.boot.Filter;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -55,14 +55,20 @@ public class ProductController {
     }
 
     @GetMapping("/products/{id}")
-    @ApiMessage("Fetch product by id")
-    public ResponseEntity<ResProductDetailsDTO> fetchProductById(
+    @ApiMessage("Fetch product by ID")
+    public ResponseEntity<RestResponse<ResProductDetailsDTO>> fetchProductById(
             @PathVariable("id") Long id) throws IdInvalidException {
         Product product = this.productService.getProductById(id);
         if (product == null) {
             throw new IdInvalidException("Product with id = " + id + " does not exist.");
         }
-        return ResponseEntity.ok(this.productService.convertToResProductDetailsDTO(product));
+
+        RestResponse<ResProductDetailsDTO> res = new RestResponse<>();
+        res.setData(this.productService.convertToResProductDetailsDTO(product));
+        res.setMessage("Fetch product by id successfully");
+        res.setStatusCode(HttpStatus.CREATED.value());
+
+        return ResponseEntity.ok(res);
     }
 
 
@@ -72,11 +78,12 @@ public class ProductController {
             @Valid @RequestBody ReqProductDTO reqProduct,
             @PathVariable("id") Optional<Long> idOptional)
             throws IdInvalidException {
-        if (!idOptional.isEmpty()) {
+        if (idOptional.isPresent()) {
             Product product = this.productService.updateProduct(idOptional.get(), reqProduct);
             RestResponse<Product> res = new RestResponse<>();
             res.setData(product);
             res.setMessage("Product updated successfully");
+            res.setStatusCode(HttpStatus.OK.value());
 
             return ResponseEntity.ok(res);
         }
@@ -88,8 +95,8 @@ public class ProductController {
     public ResponseEntity<RestResponse<String>> deleteProductById(@PathVariable("id") Optional<Long> idOptional) {
         this.productService.deleteById(idOptional.orElse(0L));
         RestResponse<String> res = new RestResponse<>();
-        res.setData("Product deleted successfully");
-
+        res.setMessage("Product deleted successfully");
+        res.setStatusCode(HttpStatus.OK.value());
         return ResponseEntity.ok(res);
     }
 
