@@ -40,7 +40,7 @@ public class PermissionController {
             throw new IdInvalidException("Permission không tồn tại.");
         }
 
-        if (this.pService.isPermissionExist(permission)) {
+        if (this.pService.isPermissionExist(permission) && this.pService.isSameName(permission)) {
             throw new IdInvalidException("Permission đã tồn tại.");
         }
 

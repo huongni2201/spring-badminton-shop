@@ -8,6 +8,7 @@ import badminton_shop.badminton.repository.CartRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CartService {
@@ -31,10 +32,15 @@ public class CartService {
     }
 
     public Cart fetchCartByUser(User user) {
-        return this.cartRepository.findByUser(user);
+        return cartRepository.findByUser(user);
     }
 
+
     public ResCartDTO convertToResCartDTO(Cart cart) {
+        if (cart == null) {
+            return ResCartDTO.builder().build();
+        }
+
         ResCartDTO resCartDTO = ResCartDTO.builder().build();
 
         ResCartDTO.ResCartUserDTO resCartUserDTO = ResCartDTO.ResCartUserDTO

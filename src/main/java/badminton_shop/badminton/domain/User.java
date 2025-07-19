@@ -40,9 +40,8 @@ public class User {
 
     private String address;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "role_id", nullable = false)
-    @JsonBackReference
+    @ManyToOne
+    @JoinColumn(name = "role_id")
     private Role role;
 
     private String avatar;

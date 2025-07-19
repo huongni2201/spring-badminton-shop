@@ -7,7 +7,6 @@ import badminton_shop.badminton.domain.response.user.ResUpdateUserDTO;
 import badminton_shop.badminton.domain.response.user.ResUserDTO;
 import badminton_shop.badminton.domain.response.ResultPaginationDTO;
 import badminton_shop.badminton.utils.SecurityUtil;
-import badminton_shop.badminton.utils.constant.RoleName;
 import badminton_shop.badminton.utils.exception.IdInvalidException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -63,9 +62,14 @@ public class UserService {
 			currentUser.setAvatar(reqUser.getAvatar());
 			currentUser.setDob(reqUser.getDob());
 			currentUser.setAddress(reqUser.getAddress());
-			return userRepository.save(currentUser);
+
+			if (reqUser.getRole() != null) {
+				Role foundRole = roleService.fetchRoleById(reqUser.getRole().getId());
+				reqUser.setRole(foundRole);
+			}
+			currentUser = this.userRepository.save(currentUser);
 		}
-		return null;
+		return currentUser;
 	}
 
 	public void updateUserToken(String token, String email) {
@@ -83,7 +87,6 @@ public class UserService {
 	public User findByEmail(String email) {
 		return userRepository.findByEmail(email);
 	}
-
 
 	public User fetchUserLogin() throws IdInvalidException {
 		String email = SecurityUtil.getCurrentUserLogin()
@@ -107,25 +110,25 @@ public class UserService {
 	}
 
 	public User handleCreateUser(User user) {
-		if (user.getRole() != null && user.getRole().getName() != null) {
-			Role foundRole = roleService.findByName(user.getRole().getName());
-			user.setRole(foundRole != null ? foundRole : roleService.findByName(RoleName.USER));
-		} else {
-			user.setRole(roleService.findByName(RoleName.USER));
+		if (user.getRole() != null) {
+			Role foundRole = roleService.fetchRoleById(user.getRole().getId());
+			user.setRole(foundRole);
 		}
-
 		return userRepository.save(user);
 	}
 
 	public ResCreateUserDTO convertToResCreateUserDTO(User user) {
 		ResCreateUserDTO res = new ResCreateUserDTO();
+		ResCreateUserDTO.RoleUser roleUser = new ResCreateUserDTO.RoleUser();
 		res.setId(user.getUserId());
 		res.setFullName(user.getFullName());
 		res.setEmail(user.getEmail());
 		res.setPhone(user.getPhone());
 
 		if (user.getRole() != null) {
-			res.setRole(RoleName.valueOf(String.valueOf(user.getRole().getName())));
+			roleUser.setRoleId(user.getRole().getId());
+			roleUser.setRole(String.valueOf(user.getRole().getName()));
+			res.setRole(roleUser);
 		}
 
 		res.setAvatar(user.getAvatar());

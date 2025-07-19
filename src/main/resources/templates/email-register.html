@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng ký thành công</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to bottom right, #f0f4f8, #e2ecf4);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .card {
+            background-color: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 450px;
+        }
+
+        h2 {
+            color: #10b981; /* Tailwind green-500 */
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #4b5563; /* Tailwind gray-700 */
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .shop-name {
+            font-weight: bold;
+            color: #3b82f6; /* Tailwind blue-500 */
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2 th:text="'Xin chào ' + ${fullName} + '!'">Xin chào!</h2>
+    <p>Cảm ơn bạn đã đăng ký tài khoản tại <span class="shop-name">Badminton Shop</span>.</p>
+    <p>Chúc bạn có trải nghiệm mua sắm tuyệt vời!</p>
+</div>
+</body>
+</html>

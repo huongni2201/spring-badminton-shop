@@ -6,6 +6,7 @@ import com.nimbusds.jose.util.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -21,6 +22,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -41,40 +43,46 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(
             HttpSecurity http,
-            CustomAuthenticationEntryPoint customAuthenticationEntryPoint) throws Exception {
+            CustomAuthenticationEntryPoint customAuthenticationEntryPoint,
+            CorsConfigurationSource corsConfigurationSource) throws Exception {
 
         String[] whiteList = {
                 "/",
                 "/api/v1/auth/login",
                 "/api/v1/auth/refresh",
+                "/api/v1/auth/register",
                 "/storage/**",
-                "/api/v1/products/**",
-                "/api/v1/categories/**",
-                "/api/v1/brands/**",
         };
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(Customizer.withDefaults())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .authorizeHttpRequests(
                         authorize -> authorize
                                 .requestMatchers(whiteList).permitAll()
-                                .anyRequest().authenticated())
+                                .requestMatchers(HttpMethod.GET, "/api/v1/products").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/brands").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/categories").permitAll()
+                                .anyRequest().authenticated()
+                )
                 .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(Customizer.withDefaults())
+                        .jwt(jwt -> jwt
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter())
+                        )
                         .authenticationEntryPoint(customAuthenticationEntryPoint)
                 )
-                //default exception
                 .exceptionHandling(
                         exceptions -> exceptions
-                                .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint()) //401
-                                .accessDeniedHandler(new BearerTokenAccessDeniedHandler())) //403
-                //custom
-
+                                .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
+                                .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
+                )
                 .formLogin(form -> form.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+
         return http.build();
     }
+
 
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {

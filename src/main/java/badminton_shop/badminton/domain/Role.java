@@ -1,10 +1,8 @@
 package badminton_shop.badminton.domain;
 
 import badminton_shop.badminton.utils.SecurityUtil;
-import badminton_shop.badminton.utils.constant.RoleName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,16 +21,13 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, unique = true, length = 50)
-    private RoleName name;
+    private String name;
 
     private String description;
 
     private boolean active;
 
-    @OneToMany(mappedBy = "role")
-    @JsonManagedReference
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<User> users;
 

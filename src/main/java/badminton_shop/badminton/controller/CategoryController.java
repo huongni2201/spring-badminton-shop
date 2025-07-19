@@ -22,9 +22,7 @@ public class CategoryController {
     @ApiMessage("fetch all categories")
     public ResponseEntity<List<Category>> fetchCategories() {
 
-        List<Category> categories = this.categoryService.getAllCategories();
-
-        return ResponseEntity.ok(categories);
+        return ResponseEntity.ok(this.categoryService.getAllCategories());
     }
 
 }

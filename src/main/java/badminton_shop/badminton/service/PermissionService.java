@@ -3,6 +3,7 @@ package badminton_shop.badminton.service;
 import badminton_shop.badminton.domain.Permission;
 import badminton_shop.badminton.domain.response.ResultPaginationDTO;
 import badminton_shop.badminton.repository.PermissionRepository;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -69,5 +70,13 @@ public class PermissionService {
                 permission.getModule(),
                 permission.getApiPath(),
                 permission.getMethod());
+    }
+
+    public boolean isSameName(Permission permission) {
+        Permission permissionInDb = this.permissionRepository.findById(permission.getId()).orElse(null);
+        if (permissionInDb != null) {
+            return permissionInDb.getName().equals(permission.getName());
+        }
+        return false;
     }
 }

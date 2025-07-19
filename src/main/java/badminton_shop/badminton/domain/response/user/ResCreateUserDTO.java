@@ -1,7 +1,7 @@
 package badminton_shop.badminton.domain.response.user;
 
 import badminton_shop.badminton.utils.constant.GenderEnum;
-import badminton_shop.badminton.utils.constant.RoleName;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,9 +15,16 @@ public class ResCreateUserDTO {
     private String fullName;
     private String email;
     private String phone;
-    private RoleName role;
+    private RoleUser role;
     private String avatar;
     private LocalDate dob;
     private GenderEnum gender;
     private Instant createdAt;
+
+    @Getter
+    @Setter
+    public static class RoleUser {
+        private long roleId;
+        private String role;
+    }
 }

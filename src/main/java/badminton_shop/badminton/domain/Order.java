@@ -45,6 +45,9 @@ public class Order {
     @Column(nullable = false)
     private PaymentMethod paymentMethod;
 
+    @Column(name = "qr_code_url", length = 1024)
+    private String qrCodeUrl;
+
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")

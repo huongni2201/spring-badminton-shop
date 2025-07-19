@@ -41,9 +41,9 @@ public class RoleController {
             throw new IdInvalidException("Role id not found.");
         }
 
-        if (this.roleService.existsByName(role.getName())) {
-            throw new IdInvalidException("Role name already exists.");
-        }
+//        if (this.roleService.existsByName(role.getName())) {
+//            throw new IdInvalidException("Role name already exists.");
+//        }
 
         return ResponseEntity.ok(this.roleService.updateRole(role));
     }

@@ -1,14 +1,13 @@
 package badminton_shop.badminton.domain.response.user;
 
 
-import badminton_shop.badminton.utils.constant.GenderEnum;
+import badminton_shop.badminton.domain.Role;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import java.time.LocalDate;
-
 @Getter
 @Setter
+@Builder
 public class ResLoginDTO {
     @JsonProperty("access_token")
     String accessToken;
@@ -23,11 +22,8 @@ public class ResLoginDTO {
         private Long id;
         private String email;
         private String fullName;
-        private String phone;
-        private String avatar;
-        private String role;
-        private String dob;
-        private GenderEnum gender;
+        private Role role;
+
     }
 
     @Getter
@@ -36,6 +32,17 @@ public class ResLoginDTO {
     @AllArgsConstructor
     public static class UserGetAccout {
          private UserLogin user;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserInsideToken {
+        private Long id;
+        private String email;
+        private String fullName;
+        private String avatar;
     }
 
 

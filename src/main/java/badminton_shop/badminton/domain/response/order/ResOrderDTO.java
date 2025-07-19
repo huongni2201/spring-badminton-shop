@@ -25,8 +25,21 @@ public class ResOrderDTO {
     private String note;
     private PaymentMethod paymentMethod;
 
+    private ResPaymentInfoDTO paymentInfo;
+
     private List<ResOrderItemDTO> items;
 
     private Instant createdAt;
+
+    @Getter
+    @Setter
+    public static class ResPaymentInfoDTO {
+        private String bankOwner;
+        private String bankNumber;
+        private String bankName;
+        private String qrCodeUrl;
+
+
+    }
 
 }

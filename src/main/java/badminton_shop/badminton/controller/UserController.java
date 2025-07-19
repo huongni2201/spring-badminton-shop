@@ -8,6 +8,7 @@ import badminton_shop.badminton.domain.response.user.ResUserDTO;
 import badminton_shop.badminton.domain.response.ResultPaginationDTO;
 import badminton_shop.badminton.domain.response.user.ResUserInfo;
 import badminton_shop.badminton.service.OrderService;
+import badminton_shop.badminton.service.RoleService;
 import badminton_shop.badminton.utils.annotation.ApiMessage;
 import badminton_shop.badminton.utils.exception.IdInvalidException;
 import com.turkraft.springfilter.boot.Filter;
@@ -28,10 +29,12 @@ public class UserController {
     private final UserService userService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final OrderService orderService;
+    private final RoleService roleService;
 
-    public UserController(UserService userService, OrderService orderService) {
+    public UserController(UserService userService, OrderService orderService, RoleService roleService) {
         this.userService = userService;
         this.orderService = orderService;
+        this.roleService = roleService;
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
     }
 
@@ -62,6 +65,10 @@ public class UserController {
         }
 
         postUser.setPassword(bCryptPasswordEncoder.encode(postUser.getPassword()));
+
+        if (postUser.getRole() == null) {
+            postUser.setRole(this.roleService.fetchRoleByName("USER"));
+        }
 
         User userCreated = this.userService.handleCreateUser(postUser);
         userCreated.setPassword(null);
@@ -107,7 +114,7 @@ public class UserController {
                 .phone(currentUser.getPhone())
                 .address(currentUser.getAddress())
                 .avatar(currentUser.getAvatar())
-                .gender(currentUser.getGender().toString())
+                .gender(currentUser.getGender() != null ? currentUser.getGender().name() : null)
                 .totalOrder(orders.size())
                 .totalPrice(orders.stream().mapToDouble(Order::getTotalPrice).sum())
                 .createdAt(currentUser.getCreatedAt())

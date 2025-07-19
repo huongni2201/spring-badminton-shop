@@ -9,13 +9,17 @@ import badminton_shop.badminton.domain.response.order.ResOrderDTO;
 import badminton_shop.badminton.domain.response.order.ResOrderItemDTO;
 import badminton_shop.badminton.repository.OrderRepository;
 import badminton_shop.badminton.utils.constant.OrderStatus;
+import badminton_shop.badminton.utils.constant.PaymentMethod;
 import badminton_shop.badminton.utils.exception.InvalidArgumentException;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +27,15 @@ import java.util.stream.Collectors;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemService orderItemService;
+
+    @Value("${payment.bank.owner}")
+    private String owner;
+
+    @Value("${payment.bank.number}")
+    private String bankNumber;
+
+    @Value("${payment.bank.code}")
+    private String bankCode;
 
     public OrderService(OrderRepository orderRepository, OrderItemService orderItemService) {
         this.orderRepository = orderRepository;
@@ -38,7 +51,9 @@ public class OrderService {
         meta.setTotalPages(orders.getTotalPages());
         meta.setTotalItems(orders.getTotalElements());
 
-        List<ResOrderDTO> resOrders = orders.getContent().stream().map(this::convertToResOrderDTO).toList();
+        List<ResOrderDTO> resOrders = orders.getContent().stream()
+                .map(this::convertToResOrderDTO)
+                .toList();
 
         return ResultPaginationDTO.builder()
                 .meta(meta)
@@ -59,6 +74,9 @@ public class OrderService {
         return orderRepository.findAll(combinedSpec, pageable);
     }
 
+    public Order save(Order order) {
+        return orderRepository.save(order);
+    }
 
     @Transactional
     public Order createOrder(ReqOrderDTO req, User currentUser) {
@@ -90,12 +108,22 @@ public class OrderService {
         return orderRepository.save(finalOrder);
     }
 
+
     public ResOrderDTO convertToResOrderDTO(Order order) {
 
         List<ResOrderItemDTO> items = order.getOrderItems()
                 .stream()
                 .map(this.orderItemService::convertToResOrderItemDTO)
                 .toList();
+
+        ResOrderDTO.ResPaymentInfoDTO resPaymentInfoDTO = new ResOrderDTO.ResPaymentInfoDTO();
+
+        if (order.getPaymentMethod() == PaymentMethod.BANK) {
+            resPaymentInfoDTO.setBankName(bankCode);
+            resPaymentInfoDTO.setBankOwner(owner);
+            resPaymentInfoDTO.setBankNumber(bankNumber);
+            resPaymentInfoDTO.setQrCodeUrl(order.getQrCodeUrl());
+        }
 
         return ResOrderDTO.builder()
                 .orderId(order.getId())
@@ -108,8 +136,15 @@ public class OrderService {
                 .address(order.getAddress())
                 .note(order.getNote())
                 .paymentMethod(order.getPaymentMethod())
+                .paymentInfo(resPaymentInfoDTO)
                 .items(items)
                 .build();
     }
+
+    public String buildTransferDescription(Long orderId) {
+        String date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        return "DH-" + date + "-" + orderId;
+    }
+
 
 }

@@ -1,6 +1,5 @@
 package badminton_shop.badminton.utils.exception;
 
-
 import badminton_shop.badminton.domain.response.RestResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,61 +18,54 @@ import java.util.List;
 @RestControllerAdvice
 public class GlobalException {
 
-    @ExceptionHandler(value =
-            {UsernameNotFoundException.class,
+    @ExceptionHandler({
+            UsernameNotFoundException.class,
             BadCredentialsException.class,
             IdInvalidException.class,
-            MissingRequestCookieException.class})
-    public ResponseEntity<RestResponse<Object>> handleIdException(Exception ex) {
-        RestResponse<Object> resResponse = new RestResponse<>();
-        resResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
-        resResponse.setMessage("Exception occurs...");
-        resResponse.setError(ex.getMessage());
-        return ResponseEntity.badRequest().body(resResponse);
+            MissingRequestCookieException.class
+    })
+    public ResponseEntity<RestResponse<Object>> handleAuthenticationExceptions(Exception ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(RestResponse.fail(400, "Yêu cầu không hợp lệ", ex.getMessage()));
     }
 
-    @ExceptionHandler(value =
-            {NoResourceFoundException.class})
-    public ResponseEntity<RestResponse<Object>> handleNotFoundException(Exception ex) {
-        RestResponse<Object> resResponse = new RestResponse<>();
-        resResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
-        resResponse.setMessage("404 Not Found...");
-        resResponse.setError(ex.getMessage());
-        return ResponseEntity.badRequest().body(resResponse);
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<RestResponse<Object>> handleNotFound(NoResourceFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(RestResponse.fail(404, "Không tìm thấy tài nguyên", ex.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<RestResponse<Object>> validationError(MethodArgumentNotValidException exception) {
-        BindingResult result = exception.getBindingResult();
+    public ResponseEntity<RestResponse<Object>> handleValidationErrors(MethodArgumentNotValidException ex) {
+        BindingResult result = ex.getBindingResult();
+        List<FieldError> fieldErrors = result.getFieldErrors();
 
-        final List<FieldError> fieldErrors = result.getFieldErrors();
+        List<String> messages = fieldErrors.stream()
+                .map(FieldError::getDefaultMessage)
+                .toList();
 
-        RestResponse<Object> res = new RestResponse<>();
-        res.setStatusCode(HttpStatus.BAD_REQUEST.value());
-        res.setError(exception.getBody().getDetail());
+        String message = messages.size() > 1 ? "Nhiều lỗi xác thực xảy ra" : messages.get(0);
 
-        List<String> errors = fieldErrors.stream().map(f -> f.getDefaultMessage()).toList();
-        res.setMessage(errors.size() > 1 ? errors : errors.get(0));
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(RestResponse.fail(400, message, String.join(", ", messages)));
     }
 
-    @ExceptionHandler(value =
-            {StorageException.class})
-    public ResponseEntity<RestResponse<Object>> handleFileUploadException(Exception ex) {
-        RestResponse<Object> resResponse = new RestResponse<>();
-        resResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
-        resResponse.setMessage("Exception upload file occurs...");
-        resResponse.setError(ex.getMessage());
-        return ResponseEntity.badRequest().body(resResponse);
+    @ExceptionHandler(StorageException.class)
+    public ResponseEntity<RestResponse<Object>> handleFileUploadError(StorageException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(RestResponse.fail(400, "Lỗi khi tải tệp lên", ex.getMessage()));
     }
 
-    @ExceptionHandler(value =
-            {InvalidArgumentException.class})
-    public ResponseEntity<RestResponse<Object>> handleIllegalArgumentException(Exception ex) {
-        RestResponse<Object> resResponse = new RestResponse<>();
-        resResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
-        resResponse.setMessage("Invalid argument occurs...");
-        resResponse.setError(ex.getMessage());
-        return ResponseEntity.badRequest().body(resResponse);
+    @ExceptionHandler(InvalidArgumentException.class)
+    public ResponseEntity<RestResponse<Object>> handleInvalidArgument(InvalidArgumentException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(RestResponse.fail(400, "Tham số không hợp lệ", ex.getMessage()));
+    }
+
+    // CATCH-ALL: Bắt các lỗi không khai báo riêng
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<RestResponse<Object>> handleGeneralException(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(RestResponse.internalError("Lỗi không xác định: " + ex.getMessage()));
     }
 }

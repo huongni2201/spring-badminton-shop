@@ -4,7 +4,6 @@ import badminton_shop.badminton.domain.Permission;
 import badminton_shop.badminton.domain.Role;
 import badminton_shop.badminton.domain.response.ResultPaginationDTO;
 import badminton_shop.badminton.repository.PermissionRepository;
-import badminton_shop.badminton.utils.constant.RoleName;
 import badminton_shop.badminton.repository.RoleRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,15 +23,15 @@ public class RoleService {
         this.permissionRepository = permissionRepository;
     }
 
+    public Role fetchRoleByName(String name) {
+        return this.roleRepository.findByName(name);
+    }
+
     public Role fetchRoleById(Long id) {
         return roleRepository.findById(id).orElse(null);
     }
 
-    public Role findByName(RoleName name) {
-        return roleRepository.findByName(name);
-    }
-
-    public boolean existsByName(RoleName name) {
+    public boolean existsByName(String name) {
         return roleRepository.existsByName(name);
     }
 
