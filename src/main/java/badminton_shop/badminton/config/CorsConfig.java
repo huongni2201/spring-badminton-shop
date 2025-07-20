@@ -1,5 +1,6 @@
 package badminton_shop.badminton.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
@@ -10,6 +11,10 @@ import java.util.Arrays;
 
 @Configuration
 public class CorsConfig {
+
+    @Value("${FRONTEND_URL}")
+    private String frontendUrl;
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         var configuration = new CorsConfiguration();
@@ -19,7 +24,8 @@ public class CorsConfig {
                 "http://localhost:3000",
                 "http://localhost:5173",
                 "http://localhost:4173",
-                "http://localhost:8080"));
+                "http://localhost:8080",
+                frontendUrl));
 
         // Method can be used to access the db
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Allowed methods

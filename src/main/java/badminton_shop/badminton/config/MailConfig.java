@@ -1,6 +1,6 @@
 package badminton_shop.badminton.config;
 
-import io.github.cdimascio.dotenv.Dotenv;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -10,13 +10,15 @@ import java.util.Properties;
 
 @Configuration
 public class MailConfig {
-    private final Dotenv dotenv = Dotenv.configure().filename(".env.dev").load();
+
+    @Value("${MAIL_USERNAME}")
+    private String username;
+
+    @Value("${MAIL_PASSWORD}")
+    private String password;
 
     @Bean
     public JavaMailSender mailSender() {
-        String username = dotenv.get("MAIL_USERNAME");
-        String password = dotenv.get("MAIL_PASSWORD");
-
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
