@@ -12,6 +12,8 @@ VALUES ('ADMIN', 'Quản trị hệ thống', true, NOW(), NOW(), 'system', 'sys
        ('STAFF', 'Nhân viên bán hàng', true, NOW(), NOW(), 'system', 'system'),
        ('CUSTOMER', 'Khách hàng', true, NOW(), NOW(), 'system', 'system');
 
+UPDATE roles SET active = true;
+
 -- ======= PERMISSION_ROLE MAPPING =======
 -- ADMIN: full access
 INSERT INTO permission_role (role_id, permission_id)
