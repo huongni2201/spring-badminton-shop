@@ -11,10 +11,6 @@ import java.util.Arrays;
 
 @Configuration
 public class CorsConfig {
-
-    @Value("${FRONTEND_URL}")
-    private String frontendUrl;
-
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         var configuration = new CorsConfiguration();
