@@ -25,7 +25,7 @@ public class CorsConfig {
                 "http://localhost:5173",
                 "http://localhost:4173",
                 "http://localhost:8080",
-                frontendUrl));
+                "https://reactjs-badminton-shop.vercel.app"));
 
         // Method can be used to access the db
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Allowed methods
