@@ -77,7 +77,7 @@ public class UserController {
 
     @PutMapping("/api/v1/users/{id}")
     @ApiMessage("Update a user")
-    public ResponseEntity<ResUpdateUserDTO> updateUser(@PathVariable("id") Long id, @RequestBody User reqUser) throws IdInvalidException {
+    public ResponseEntity<ResUpdateUserDTO> updateUser(@PathVariable("id") long id, @RequestBody User reqUser) throws IdInvalidException {
         reqUser.setUserId(id);
         User updateUser = this.userService.handleUpdateUser(reqUser);
         if (updateUser == null) {

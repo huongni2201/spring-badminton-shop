@@ -64,9 +64,10 @@ public class UserService {
 			currentUser.setAddress(reqUser.getAddress());
 
 			if (reqUser.getRole() != null) {
-				Role foundRole = roleService.fetchRoleById(reqUser.getRole().getId());
-				reqUser.setRole(foundRole);
+				Role foundRole = roleService.fetchRoleByName(reqUser.getRole().getName());
+				currentUser.setRole(foundRole);
 			}
+
 			currentUser = this.userRepository.save(currentUser);
 		}
 		return currentUser;
