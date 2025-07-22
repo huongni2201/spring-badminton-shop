@@ -59,7 +59,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(
                         authorize -> authorize
                                 .requestMatchers(whiteList).permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/v1/products").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/brands").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/categories").permitAll()
                                 .anyRequest().authenticated()

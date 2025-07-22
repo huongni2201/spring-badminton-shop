@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -98,6 +99,10 @@ public class ProductService {
 
         ProductVariantAttribute colorAttr = productVariantAttributeService.getProductVariantAttributeByName("color");
         ProductVariantAttribute sizeAttr = productVariantAttributeService.getProductVariantAttributeByName("size");
+
+        if (colorAttr == null || sizeAttr == null) {
+            System.out.println("colorAttr: " + colorAttr + ", sizeAttr: " + sizeAttr);
+        }
 
         Product finalProduct = product;
         List<ProductVariant> variants = dto.getVariants().stream()

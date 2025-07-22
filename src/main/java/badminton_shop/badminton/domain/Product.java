@@ -41,6 +41,7 @@ public class Product {
     @Column(unique = true, nullable = false, length = 100)
     private String name;
 
+    @Column(length = 500)
     private String description;
 
     @ManyToOne(optional = false)
